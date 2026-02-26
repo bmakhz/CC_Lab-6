@@ -25,11 +25,14 @@ pipeline {
                 sh '''
                 docker rm -f nginx-lb || true
                 
+                # Ensure nginx image is available
+                docker pull nginx:latest || echo "Using cached nginx image"
+                
                 docker run -d \
                   --name nginx-lb \
                   --network app-network \
                   -p 80:80 \
-                  nginx
+                  nginx:latest
                 
                 sleep 2
                 docker cp nginx/default.conf nginx-lb:/etc/nginx/conf.d/default.conf
