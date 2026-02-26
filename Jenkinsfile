@@ -25,10 +25,8 @@ pipeline {
                 sh '''
                 docker rm -f nginx-lb || true
                 
-                # Ensure nginx image is available
-                docker pull nginx:latest || echo "Using cached nginx image"
-                
                 docker run -d \
+                  --pull=never \
                   --name nginx-lb \
                   --network app-network \
                   -p 80:80 \
