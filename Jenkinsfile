@@ -25,19 +25,11 @@ pipeline {
                 sh '''
                 docker rm -f nginx-lb || true
                 
-                # Check if nginx image exists, if not pull it
-                if ! docker image inspect nginx:latest > /dev/null 2>&1; then
-                  echo "Pulling nginx image..."
-                  docker pull nginx:latest
-                else
-                  echo "nginx:latest image found locally"
-                fi
-                
                 docker run -d \
                   --name nginx-lb \
                   --network app-network \
                   -p 80:80 \
-                  nginx:latest
+                  nginx
                 
                 sleep 2
                 docker cp nginx/default.conf nginx-lb:/etc/nginx/conf.d/default.conf
